@@ -43,8 +43,13 @@ test:
     - conda_pycosat_solver
   commands:
     - pip check
-    - conda create -n test --dry-run scipy --solver=pycosat
-    - conda create -n test --dry-run scipy --solver=classic
+    # use `python -m conda` rather than bare `conda` so the test reliably
+    # runs against this env's own interpreter/plugins on all platforms;
+    # on Windows, bare `conda` dispatches through condabin\conda.bat,
+    # which can resolve to the base env's conda instead of this
+    # activated test env's copy.
+    - python -m conda create -n test --dry-run scipy --solver=pycosat
+    - python -m conda create -n test --dry-run scipy --solver=classic
   requires:
     - pip
     - conda
