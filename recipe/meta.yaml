@@ -16,21 +16,23 @@ source:
 
 build:
   number: {{ build_number }}
+  # build as noarch to avoid circular dependency issues in conda when
+  # adding support for new Python versions
   noarch: python
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
-    - python >=3.8
+    - python 3.10
     - pip
     - hatchling >=1.12.2
     - hatch-vcs >=0.2.0
   run:
+    - python >=3.10
     - boltons >=23.0.0
     - frozendict >=2.4.2
     - packaging >=26.3
     - pycosat >=0.6.3
-    - python >=3.8
     - tqdm >=4
   run_constrained:
     # Technically a run dependency (imported at runtime), but conda already
@@ -70,6 +72,8 @@ about:
   dev_url: https://github.com/conda/conda-pycosat-solver
 
 extra:
+  skip-lints:
+    - avoid_noarch
   recipe-maintainers:
     - jaimergp
     - jezdez
