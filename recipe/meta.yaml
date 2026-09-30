@@ -38,7 +38,7 @@ requirements:
     # Technically a run dependency (imported at runtime), but conda already
     # bundles conda-pycosat-solver by default, so a hard `run` dependency
     # here would create a dependency cycle that complicates migrations.
-    - conda >=23.7.3
+    - conda >=23.9.0
 
 test:
   imports:
