@@ -1,0 +1,80 @@
+{% set name = "conda-pycosat-solver" %}
+{% set version = "0.1.0" %}
+{% set build_number = 0 %}
+{% set sha256 = "ac103446d6f374a54f1427bdc364fc0755350242a8f3a106e7e879d2a463c8ec" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  # stable, checksummed archive uploaded by .github/workflows/upload.yml,
+  # rather than GitHub's own auto-generated (and historically not
+  # format-stable) archive link
+  url: https://github.com/conda/{{ name }}/releases/download/{{ version }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: {{ build_number }}
+  # build as noarch to avoid circular dependency issues in conda when
+  # adding support for new Python versions
+  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+
+requirements:
+  host:
+    - python 3.10
+    - pip
+    - hatchling >=1.12.2
+    - hatch-vcs >=0.2.0
+  run:
+    - python >=3.10
+    - boltons >=23.0.0
+    - frozendict >=2.4.2
+    - packaging >=26.3
+    - pycosat >=0.6.3
+    - tqdm >=4
+  run_constrained:
+    # Technically a run dependency (imported at runtime), but conda already
+    # bundles conda-pycosat-solver by default, so a hard `run` dependency
+    # here would create a dependency cycle that complicates migrations.
+    - conda >=23.7.3
+
+test:
+  imports:
+    - conda_pycosat_solver
+  commands:
+    - pip check
+    # use `python -m conda` rather than bare `conda` so the test reliably
+    # runs against this env's own interpreter/plugins on all platforms;
+    # on Windows, bare `conda` dispatches through condabin\conda.bat,
+    # which can resolve to the base env's conda instead of this
+    # activated test env's copy.
+    - python -m conda create -n test --dry-run scipy --solver=pycosat
+    - python -m conda create -n test --dry-run scipy --solver=classic
+  requires:
+    - pip
+    - conda
+
+about:
+  home: https://github.com/conda/conda-pycosat-solver
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: The pycosat solver used in conda, also available as classic
+  description: |
+    conda-pycosat-solver provides the pycosat-based SAT solver that has been
+    powering conda's resolution process since its inception, historically
+    known as the classic solver (classic remains available as an alias).
+    It is packaged separately to benefit from the configurability of the
+    conda plugin system.
+  doc_url: https://conda.github.io/conda-pycosat-solver/
+  dev_url: https://github.com/conda/conda-pycosat-solver
+
+extra:
+  skip-lints:
+    - avoid_noarch
+  recipe-maintainers:
+    - jaimergp
+    - jezdez
+    - kenodegard
