@@ -1,6 +1,6 @@
 {% set name = "conda-pycosat-solver" %}
 {% set version = "0.1.0" %}
-{% set build_number = 0 %}
+{% set build_number = 1 %}
 {% set sha256 = "ac103446d6f374a54f1427bdc364fc0755350242a8f3a106e7e879d2a463c8ec" %}
 
 package:
@@ -38,7 +38,7 @@ requirements:
     # Technically a run dependency (imported at runtime), but conda already
     # bundles conda-pycosat-solver by default, so a hard `run` dependency
     # here would create a dependency cycle that complicates migrations.
-    - conda >=23.7.3
+    - conda >26.7.3
 
 test:
   imports:
