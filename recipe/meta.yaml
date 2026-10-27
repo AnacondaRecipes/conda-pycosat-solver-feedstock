@@ -1,7 +1,7 @@
 {% set name = "conda-pycosat-solver" %}
-{% set version = "0.1.0" %}
+{% set version = "26.10.0" %}
 {% set build_number = 0 %}
-{% set sha256 = "ac103446d6f374a54f1427bdc364fc0755350242a8f3a106e7e879d2a463c8ec" %}
+{% set sha256 = "152aeb97ace0c1e88a41fa7115de729d6b335efb6b3afdfe9a0c524b85b5f78a" %}
 
 package:
   name: {{ name }}
@@ -23,13 +23,12 @@ build:
 
 requirements:
   host:
-    - python 3.10
+    - python 3.11
     - pip
     - hatchling >=1.12.2
     - hatch-vcs >=0.2.0
   run:
-    - python >=3.10
-    - boltons >=23.0.0
+    - python >=3.11
     - frozendict >=2.4.2
     - packaging >=26.3
     - pycosat >=0.6.3
@@ -38,7 +37,7 @@ requirements:
     # Technically a run dependency (imported at runtime), but conda already
     # bundles conda-pycosat-solver by default, so a hard `run` dependency
     # here would create a dependency cycle that complicates migrations.
-    - conda >=23.7.3
+    - conda >=26.5
 
 test:
   imports:
